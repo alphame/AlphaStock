@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/codeTextView"
+        android:textIsSelectable="false"
+        android:textSize="15dp"
+        android:layout_weight="1"
+        android:longClickable="false" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/curPriceTextView"
+        android:textSize="15dp"
+        android:layout_weight="1"
+        android:longClickable="false" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/rateTextView"
+        android:textSize="15dp"
+        android:layout_weight="1"
+        android:longClickable="false" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/highestTextView"
+        android:textSize="15dp"
+        android:layout_weight="1"
+        android:longClickable="false" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/lowestTextView"
+        android:textSize="15dp"
+        android:layout_weight="1"
+        android:longClickable="false" />
+
+</LinearLayout>
