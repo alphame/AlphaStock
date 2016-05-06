@@ -22,19 +22,8 @@ public class NotificationService extends Service {
     private boolean isRunning = true;
 
     public class MBinder extends Binder {
-        public void addStock(Stock stock) {
-            if (stock != null && !stock.getCode().isEmpty()
-                    && stock.getWarningPrice() != null
-                    && !stock.getWarningPrice().isEmpty()
-                    && stock.getWarningRate() != null
-                    && !stock.getWarningRate().isEmpty()) stocks.add(stock);
-        }
-
-        public void delStock(Stock stock) {
-            if (stock != null) stocks.remove(stock);
-        }
-        public void clear() {
-            stocks.clear();
+        public NotificationService getService() {
+            return NotificationService.this;
         }
     }
 
@@ -60,7 +49,7 @@ public class NotificationService extends Service {
             @Override
             public void run() {
                 while (isRunning) {
-                    if (!stocks.isEmpty()) {
+                    if (stocks != null && !stocks.isEmpty()) {
                         for (Stock each : stocks) {
                             Stock newOne = alphaStock.search(each.getCode());
                             try {
@@ -96,5 +85,21 @@ public class NotificationService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
+    }
+
+    public void addStock(Stock stock) {
+        if (stock != null && !stock.getCode().isEmpty()
+                && stock.getWarningPrice() != null
+                && !stock.getWarningPrice().isEmpty()
+                && stock.getWarningRate() != null
+                && !stock.getWarningRate().isEmpty()) stocks.add(stock);
+    }
+
+    public void delStock(Stock stock) {
+        if (stock != null) stocks.remove(stock);
+    }
+
+    public void clear() {
+        stocks.clear();
     }
 }

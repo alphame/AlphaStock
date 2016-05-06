@@ -51,20 +51,16 @@ public class MyListViewAdapter extends BaseAdapter {
         TextView code = (TextView)convertView.findViewById(R.id.codeTextView);
         TextView curPrice = (TextView)convertView.findViewById(R.id.curPriceTextView);
         TextView rate = (TextView)convertView.findViewById(R.id.rateTextView);
-        TextView highest = (TextView)convertView.findViewById(R.id.highestTextView);
-        TextView lowest = (TextView)convertView.findViewById(R.id.lowestTextView);
         code.setText(stock.getCode());
         curPrice.setText(stock.getCurrentPrice());
         rate.setText(stock.getRate());
-        highest.setText(stock.getHighestPrice());
-        lowest.setText(stock.getLowestPrice());
-        setTextColorByRate(stock, code, curPrice, rate, highest, lowest);
+        setTextColorByRate(stock, code, curPrice, rate);
         return convertView;
     }
 
     private void setTextColorByRate(Stock stock, TextView... params) {
-        if (params.length != 5 || stock == null || stock.getRate() == null) return;
-        if (stock.getRate().startsWith("-")) {
+        if (params.length != 3 || stock == null || stock.getRate() == null) return;
+        if (stock.getRate().trim().startsWith("-")) {
             for (TextView each:params) each.setTextColor(Color.rgb(0,255,0));
         } else if (stock.getRate().equals("0.00%")) {
             for (TextView each:params) each.setTextColor(Color.rgb(0, 0, 255));

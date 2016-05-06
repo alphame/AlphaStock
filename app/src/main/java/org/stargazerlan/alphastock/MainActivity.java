@@ -56,7 +56,10 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private StocksAutoUpdate stocksAutoUpdate;
-    private Binder notiServiceBinder;
+    private NotificationService notificationService;
+    private boolean isBinded;
+
+    private final static String TAG = "MainActivity";
 
     private Handler uiHandler = new Handler() {
         @Override
@@ -71,12 +74,13 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
     private ServiceConnection serviceConn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            notiServiceBinder = (Binder)service;
+            notificationService = ((NotificationService.MBinder)service).getService();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            notificationService = null;
+            isBinded = false;
         }
     };
 
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
         listViewInit();
         addStockDialog = new AddStockDialog();
         stocksAutoUpdateStart();
+        serviceInit();
     }
 
     @Override
@@ -106,10 +111,10 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-
+        AlertDialog.Builder alertBuilder;
         switch (item.getItemId()) {
             case R.id.deleteStockItem:
+                alertBuilder = new AlertDialog.Builder(this);
                 alertBuilder.setTitle("Delete this stock?");
                 alertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -122,7 +127,31 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
                 alertBuilder.create().show();
                 return true;
             case R.id.addForAlarmItem:
+                alertBuilder = new AlertDialog.Builder(this);
+                alertBuilder.setTitle("Set the price and rate to be alarmed.");
+                View v = getLayoutInflater().inflate(R.layout.add_alarm_dialog, null);
+                alertBuilder.setView(v);
+                final EditText addPrice = (EditText)v.findViewById(R.id.addAlarmPrice);
+                final EditText addRate = (EditText)v.findViewById(R.id.addAlarmRate);
 
+                alertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String code = stocks.get(info.position - 1).getCode();
+                        String price = addPrice.getText().toString();
+                        String rate = addRate.getText().toString();
+                        Stock stock = new Stock();
+                        if (code != null) stock.setCode(code);
+                        if (price != null) stock.setWarningPrice(price);
+                        if (rate != null) stock.setWarningRate(rate);
+                        if (notificationService != null) {
+                            notificationService.addStock(stock);
+                            Log.v(TAG, "alarm stock added.");
+                        } else Log.v(TAG, "adding alarm stock failed.");
+                    }
+                });
+                alertBuilder.setNegativeButton("CANCEL", null);
+                alertBuilder.create().show();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -137,16 +166,16 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
 
     @Override
     protected void onStop() {
-        saveStocks();
-        unbindService(serviceConn);
         super.onStop();
+        saveStocks();
+        unbindService();
     }
 
     @Override
     protected void onDestroy() {
-        saveStocks();
-        unbindService(serviceConn);
         super.onDestroy();
+        saveStocks();
+        unbindService();
     }
 
     @Override
@@ -186,9 +215,16 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
 
     private void serviceInit() {
         Intent intent = new Intent();
-        intent.setClass(getApplicationContext(), NotificationService.class);
-        bindService(intent, serviceConn, 0);
+        intent.setClass(this, NotificationService.class);
         startService(intent);
+        isBinded = bindService(intent, serviceConn, BIND_AUTO_CREATE);
+    }
+
+    private void unbindService() {
+        if (isBinded) {
+            unbindService(serviceConn);
+            isBinded = false;
+        }
     }
 
     private void listViewInit() {

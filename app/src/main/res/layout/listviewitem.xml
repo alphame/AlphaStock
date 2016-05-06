@@ -28,20 +28,4 @@
         android:layout_weight="1"
         android:longClickable="false" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/highestTextView"
-        android:textSize="15dp"
-        android:layout_weight="1"
-        android:longClickable="false" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/lowestTextView"
-        android:textSize="15dp"
-        android:layout_weight="1"
-        android:longClickable="false" />
-
 </LinearLayout>
