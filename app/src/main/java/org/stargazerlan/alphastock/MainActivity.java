@@ -138,12 +138,14 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
     @Override
     protected void onStop() {
         saveStocks();
+        unbindService(serviceConn);
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         saveStocks();
+        unbindService(serviceConn);
         super.onDestroy();
     }
 

@@ -19,6 +19,7 @@ public class NotificationService extends Service {
     NotificationManager notificationManager;
 
     private final static String TAG = "NotificationService";
+    private boolean isRunning = true;
 
     public class MBinder extends Binder {
         public void addStock(Stock stock) {
@@ -49,7 +50,7 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
         notificationBuilder = new Notification.Builder(NotificationService.this);
-       notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class NotificationService extends Service {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void run() {
-                while (true) {
+                while (isRunning) {
                     if (!stocks.isEmpty()) {
                         for (Stock each : stocks) {
                             Stock newOne = alphaStock.search(each.getCode());
@@ -89,5 +90,11 @@ public class NotificationService extends Service {
         }).start();
         Log.v(TAG, "notification service started.");
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isRunning = false;
     }
 }
