@@ -44,6 +44,7 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         new Thread(new Runnable() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -54,14 +55,10 @@ public class NotificationService extends Service {
                             Stock newOne = alphaStock.search(each.getCode());
                             try {
                                 if (Float.valueOf(newOne.getCurrentPrice()) >= Float.valueOf(each.getWarningPrice())) {
-                                    notificationBuilder.setContentTitle(each.getCode() + " has reached the warning price");
-                                    notificationBuilder.setContentText("current price:" + newOne.getCurrentPrice());
-                                    notificationManager.notify(0, notificationBuilder.build());
+                                    makeNotification(each, newOne, "price");
                                 }
                                 if (Float.valueOf(newOne.getRate()) >= Float.valueOf(each.getWarningRate())) {
-                                    notificationBuilder.setContentTitle(each.getCode() + " has reached the warning rate");
-                                    notificationBuilder.setContentText("current rate:" + newOne.getRate());
-                                    notificationManager.notify(0, notificationBuilder.build());
+                                    makeNotification(each, newOne, "rate");
                                 }
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
@@ -101,5 +98,27 @@ public class NotificationService extends Service {
 
     public void clear() {
         stocks.clear();
+    }
+
+    private String getRidOfTheSymbols(String value) {
+        if (value == null || value.isEmpty()) return null;
+        return null;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void makeNotification(Stock each, Stock newOne, String type) {
+        if (newOne == null || each == null || type == null || type.isEmpty()) return;
+        if (type.equals("price")) {
+            notificationBuilder.setSmallIcon(R.drawable.ic_stat_name);
+            notificationBuilder.setContentTitle(each.getCode() + " has reached the warning price");
+            notificationBuilder.setContentText("current price:" + newOne.getCurrentPrice());
+            notificationManager.notify(0, notificationBuilder.build());
+        }
+        if (type.equals("rate")) {
+            notificationBuilder.setSmallIcon(R.drawable.ic_stat_name);
+            notificationBuilder.setContentTitle(each.getCode() + " has reached the warning rate");
+            notificationBuilder.setContentText("current rate:" + newOne.getRate());
+            notificationManager.notify(0, notificationBuilder.build());
+        }
     }
 }

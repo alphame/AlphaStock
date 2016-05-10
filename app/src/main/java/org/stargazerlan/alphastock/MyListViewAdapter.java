@@ -51,18 +51,22 @@ public class MyListViewAdapter extends BaseAdapter {
         TextView code = (TextView)convertView.findViewById(R.id.codeTextView);
         TextView curPrice = (TextView)convertView.findViewById(R.id.curPriceTextView);
         TextView rate = (TextView)convertView.findViewById(R.id.rateTextView);
+        TextView volume = (TextView)convertView.findViewById(R.id.volumeTextView);
+
         code.setText(stock.getCode());
         curPrice.setText(stock.getCurrentPrice());
         rate.setText(stock.getRate());
-        setTextColorByRate(stock, code, curPrice, rate);
+        volume.setText(stock.getVolume());
+        setTextColorByRate(stock, code, curPrice, rate, volume);
         return convertView;
     }
 
     private void setTextColorByRate(Stock stock, TextView... params) {
-        if (params.length != 3 || stock == null || stock.getRate() == null) return;
-        if (stock.getRate().trim().startsWith("-")) {
+        if (stock == null || stock.getRate() == null) return;
+
+        if (stock.isNagetive()) {
             for (TextView each:params) each.setTextColor(Color.rgb(0,255,0));
-        } else if (stock.getRate().equals("0.00%")) {
+        } else if (stock.getRate().equals("0.00")) {
             for (TextView each:params) each.setTextColor(Color.rgb(0, 0, 255));
         } else {
             for (TextView each:params) each.setTextColor(Color.rgb(255, 0, 0));

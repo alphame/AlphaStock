@@ -8,7 +8,9 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 /**
@@ -32,31 +34,52 @@ public class AlphaStock {
         String[] titles = doc.text().split(",");
         for (String each : titles) {
             if (each.contains("stockcode")) {
-                stock.setCode(removeTheSymbols(each));
+                fotmatAndSet(each, "stockcode", stock);
             }
             if (each.contains("xj")) {
-                stock.setCurrentPrice(removeTheSymbols(each));
+                fotmatAndSet(each, "xj", stock);
             }
             if (each.contains("zdf")) {
-                stock.setRate(removeTheSymbols(each));
+                fotmatAndSet(each, "zdf", stock);
             }
             if (each.contains("cjl")) {
-                stock.setVolume(removeTheSymbols(each));
-            }
-            if (each.contains("zg")) {
-                stock.setHighestPrice(removeTheSymbols(each));
-            }
-            if (each.contains("zd")) {
-                stock.setLowestPrice(removeTheSymbols(each));
+                fotmatAndSet(each, "cjl", stock);
             }
         }
 
         return stock;
     }
 
-    private String removeTheSymbols(String text) {
-        if (text != null && !text.isEmpty())
-            return text.split(":")[1].replace("\"", "");
-        else return null;
+    private void fotmatAndSet(String text, String type, Stock stock) {
+        if (text == null || text.isEmpty() || type == null || type.isEmpty() || stock == null) return;
+
+        String str = text.split(":")[1].replace("\"", "").trim();
+
+        if (type.equals("stockcode")) {
+            stock.setCode(str);
+        }
+        if (type.equals("xj")) {
+            stock.setCurrentPrice(str);
+        }
+        if (type.equals("zdf")) {
+            str = str.replace("%", "");
+            if (str.startsWith("-")) {
+                str = str.replace("-", "");
+                stock.setNagetive(true);
+            }
+            if (str.startsWith("+")) {
+                str = str.replace("+", "");
+                stock.setNagetive(false);
+            }
+            stock.setRate(str);
+        }
+        if (type.equals("cjl")) {
+            try {
+                str = new String(str.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            stock.setVolume(str);
+        }
     }
 }

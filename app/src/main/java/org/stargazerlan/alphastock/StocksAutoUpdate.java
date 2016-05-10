@@ -27,24 +27,17 @@ public class StocksAutoUpdate extends Thread {
     public void run() {
         while (true) {
             if (stocks!= null && !stocks.isEmpty()) {
-                for (Stock each : stocks) {
-                    Stock newOne = alphaStock.search(each.getCode());
-                    if (each.getCurrentPrice().equals(newOne.getCurrentPrice())){
-                       Log.v(TAG, "Nothing updated");
-                    } else {
-                        each.copyOf(newOne);
-                        Message msg = Message.obtain();
-                        msg.what = 1;
-                        uiHandler.sendMessage(msg);
-                        Log.v(TAG, "stocks updated");
-                    }
-                }
+                for (Stock each : stocks) each.copyOf(alphaStock.search(each.getCode()));
             }
             try {
                 Thread.sleep(updateInterval);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            Message msg = Message.obtain();
+            msg.what = 1;
+            uiHandler.sendMessage(msg);
+            Log.v(TAG, "Stocks refreshed.");
         }
     }
 }

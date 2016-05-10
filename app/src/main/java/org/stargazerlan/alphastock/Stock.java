@@ -6,16 +6,17 @@ import java.io.Serializable;
  * Created by StargazerLan on 2016/4/24.
  */
 public class Stock implements Serializable {
-    String news;
-    String name;
-    String rate;
-    String code;
-    String lowestPrice;
-    String highestPrice;
-    String currentPrice;
-    String volume;
-    String warningPrice;
-    String warningRate;
+    private String news;
+    private String name;
+    private String rate;
+    private String code;
+    private String lowestPrice;
+    private String highestPrice;
+    private String currentPrice;
+    private String volume;
+    private String warningPrice;
+    private String warningRate;
+    private boolean isNagetive = false;
 
     public void copyOf(Stock stock) {
         if (stock == null) return;
@@ -30,6 +31,15 @@ public class Stock implements Serializable {
         if (stock.getVolume() != null) volume = stock.getVolume();
         if (stock.getWarningPrice() != null) warningPrice = stock.getWarningPrice();
         if (stock.getWarningRate() != null) warningRate = stock.getWarningRate();
+        isNagetive = stock.isNagetive();
+    }
+
+    public boolean isNagetive() {
+        return isNagetive;
+    }
+
+    public void setNagetive(boolean nagetive) {
+        isNagetive = nagetive;
     }
 
     public String getVolume() {

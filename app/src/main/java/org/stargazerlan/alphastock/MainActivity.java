@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
         listViewInit();
         addStockDialog = new AddStockDialog();
         stocksAutoUpdateStart();
-        serviceInit();
+        //serviceInit();
     }
 
     @Override
@@ -138,12 +138,15 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String code = stocks.get(info.position - 1).getCode();
-                        String price = addPrice.getText().toString();
-                        String rate = addRate.getText().toString();
+                        String price = alarmStockInputFilter(addPrice.getText().toString());
+                        String rate = alarmStockInputFilter(addRate.getText().toString());
                         Stock stock = new Stock();
+
                         if (code != null) stock.setCode(code);
                         if (price != null) stock.setWarningPrice(price);
                         if (rate != null) stock.setWarningRate(rate);
+                        if (price == null && rate == null) return;
+
                         if (notificationService != null) {
                             notificationService.addStock(stock);
                             Log.v(TAG, "alarm stock added.");
@@ -279,6 +282,20 @@ public class MainActivity extends AppCompatActivity implements AddStockDialog.Di
         } catch (Exception e) {
             Log.v("Stock Code Error", e.toString());
             return result;
+        }
+        return result;
+    }
+
+    private String alarmStockInputFilter(String value) {
+        String result = null;
+        if (value == null || value.isEmpty()) return null;
+        try {
+            String temp = value.trim().replace("-", "");
+            result = temp.replace("%", "");
+            Float.valueOf(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
         return result;
     }
