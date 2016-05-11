@@ -48,16 +48,16 @@ public class MyListViewAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.listviewitem, parent, false);
         }
 
-        TextView code = (TextView)convertView.findViewById(R.id.codeTextView);
+        TextView name = (TextView)convertView.findViewById(R.id.nameTextView);
         TextView curPrice = (TextView)convertView.findViewById(R.id.curPriceTextView);
         TextView rate = (TextView)convertView.findViewById(R.id.rateTextView);
         TextView volume = (TextView)convertView.findViewById(R.id.volumeTextView);
 
-        code.setText(stock.getCode());
+        name.setText(stock.getName() + "\n" + stock.getCode());
         curPrice.setText(stock.getCurrentPrice());
         rate.setText(stock.getRate());
         volume.setText(stock.getVolume());
-        setTextColorByRate(stock, code, curPrice, rate, volume);
+        setTextColorByRate(stock, name, curPrice, rate, volume);
         return convertView;
     }
 

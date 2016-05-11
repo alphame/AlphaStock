@@ -12,12 +12,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by StargazerLan on 2016/4/24.
  */
 public class AlphaStock {
     private String webSite = "http://stockpage.10jqka.com.cn/spService/stockcode/Header/realHeader";
+    private Pattern reUnicode = Pattern.compile("\\\\u([0-9a-zA-Z]{4})");
 
     public Stock search(String code) {
         Stock stock = new Stock();
@@ -33,6 +36,9 @@ public class AlphaStock {
 
         String[] titles = doc.text().split(",");
         for (String each : titles) {
+            if (each.contains("stockname")) {
+                fotmatAndSet(each, "stockname", stock);
+            }
             if (each.contains("stockcode")) {
                 fotmatAndSet(each, "stockcode", stock);
             }
@@ -55,6 +61,9 @@ public class AlphaStock {
 
         String str = text.split(":")[1].replace("\"", "").trim();
 
+        if (type.equals("stockname")) {
+            stock.setName(decodeUnicode(str));
+        }
         if (type.equals("stockcode")) {
             stock.setCode(str);
         }
@@ -74,12 +83,19 @@ public class AlphaStock {
             stock.setRate(str);
         }
         if (type.equals("cjl")) {
-            try {
-                str = new String(str.getBytes("UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            stock.setVolume(str);
+            stock.setVolume(decodeUnicode(str));
         }
     }
+
+    private String decodeUnicode(String s) {
+        Matcher m = reUnicode.matcher(s);
+        StringBuffer sb = new StringBuffer(s.length());
+        while (m.find()) {
+            m.appendReplacement(sb,
+                    Character.toString((char) Integer.parseInt(m.group(1), 16)));
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
+
 }
