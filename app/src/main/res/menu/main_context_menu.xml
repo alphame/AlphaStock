@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/deleteStockItem" android:title="delete this stock" />
-    <item android:id="@+id/addForAlarmItem" android:title="add for alarm"/>
+    <item android:id="@+id/deleteStockItem" android:title="@string/deleteStock" />
+    <item android:id="@+id/addForAlarmItem" android:title="@string/warningSetting"/>
 </menu>

@@ -1,44 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:baselineAligned="false">
 
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Name"
-        android:id="@+id/nameHeader"
-        android:textStyle="bold"
-        android:layout_weight="1" />
+        android:layout_weight="1">
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Price"
-        android:id="@+id/curPirceHeader"
-        android:textStyle="bold"
-        android:layout_gravity="top"
-        android:layout_weight="1" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/name"
+            android:id="@+id/nameHeader"
+            android:textStyle="bold"
+            android:layout_weight="1" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Rate"
-        android:id="@+id/rateHeader"
-        android:textStyle="bold"
-        android:layout_gravity="top"
-        android:layout_weight="1" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/currentPrice"
+            android:id="@+id/curPirceHeader"
+            android:textStyle="bold"
+            android:layout_weight="1" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Volume"
-        android:id="@+id/volumeHeader"
-        android:textStyle="bold"
-        android:layout_weight="1" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/rate"
+            android:id="@+id/rateHeader"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/volume"
+            android:id="@+id/volumeHeader"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 </LinearLayout>

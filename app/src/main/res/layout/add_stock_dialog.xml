@@ -8,5 +8,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/addStockEditText"
         android:layout_gravity="center_horizontal"
-        android:inputType="text" />
+        android:numeric="integer"
+        android:digits="szsh1234567890"
+        android:maxLength="8"
+        android:singleLine="true" />
 </LinearLayout>
