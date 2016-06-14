@@ -38,4 +38,7 @@
     <string name="sell3">卖3</string>
     <string name="sell4">卖4</string>
     <string name="sell5">卖5</string>
+    <string name="yClosePrice">昨收</string>
+    <string name="openPrice">今开</string>
+    <string name="highestPrice">最高</string>
 </resources>
