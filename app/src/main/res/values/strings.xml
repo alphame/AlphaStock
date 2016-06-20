@@ -21,13 +21,14 @@
     <string name="inputStockCode">输入股票代码</string>
     <string name="deleteStock">删除股票</string>
     <string name="warningSetting">股票预警设置</string>
-    <string name="addToWarning">添加到预警</string>
+    <string name="addToWarning">添加预警</string>
     <string name="deleteWarning">删除预警</string>
     <string name="deleteWarningSuccess">删除股票预警成功</string>
     <string name="clearAll">清空自选股？</string>
     <string name="deleteSucceeded">成功删除</string>
     <string name="deleteFailed">删除失败</string>
     <string name="tenThousand">万</string>
+    <string name="hundredMillion">亿</string>
     <string name="buy1">买1</string>
     <string name="buy2">买2</string>
     <string name="buy3">买3</string>
